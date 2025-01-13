@@ -43,8 +43,8 @@ project/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/shaojiabing/Mastodon_crawler.git
-   cd Mastodon_crawler
+   git clone -b Single git@github.com:shaojiabing/FediLive.git
+   cd FediLive
    ```
 
 2. Install dependencies:
