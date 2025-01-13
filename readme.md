@@ -1,7 +1,3 @@
-### README.md
-
-# Mastodon Livefeeds Crawler
-
 This project allows you to crawl all live feeds from Mastodon instances within a specified time range. It consists of two main steps:
 1. **Fetch Mastodon instance information**.
 2. **Crawl live feeds for the specified time range**.
