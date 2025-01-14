@@ -59,12 +59,6 @@
 
     Populate the `tokens/token_list.txt` file with your API tokens, one per line. Ensure the number of tokens exceeds the number of parallel processes you intend to run.
 
-    ```
-    Pp_iUR2ayLGfF06o_af-_AKNW9GXPiwv8SobKSUDZ3c
-    I0SqxChmiDhSnUbEhXdAHnBS-XMfC0AuGNd2DoC7_Uw
-    56TDjS3vpVrHpkLz76VjNGh71942TpfSG2v0T3mssoQ
-    ...
-    ```
 
 ## Usage
 
