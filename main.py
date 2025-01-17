@@ -206,7 +206,7 @@ if __name__ == "__main__":
         p.join()
 
     # Export livefeeds to JSON
-    livefeeds_manager.export_livefeeds_to_json(args.output)
+    livefeeds_manager.export_to_json(args.output)
     db_manager.close()
 
     print("All tasks completed successfully.")

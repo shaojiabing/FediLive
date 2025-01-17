@@ -2,7 +2,7 @@ import sqlite3
 
 class DatabaseManager:
     def __init__(self, db_path="mastodon_instances.db"):
-        self.connection = sqlite3.connect(db_path)
+        self.connection = sqlite3.connect(db_path, timeout=30)
 
     def create_tables(self):
         with self.connection:
@@ -58,6 +58,45 @@ class DatabaseManager:
                     error_message TEXT
                 )
             """)
+            
+            self.connection.execute("""
+                CREATE TABLE IF NOT EXISTS booster_favouriter (
+                    sid TEXT PRIMARY KEY,
+                    boosts TEXT,
+                    favourites TEXT
+                )
+            """)
 
+    def check_status(self):
+        cursor = self.connection.cursor()
+        cursor.execute("PRAGMA table_info(livefeeds);")
+        columns = cursor.fetchall()
+
+        if not any(column[1] == 'status' for column in columns):
+            self.connection.execute("""
+                ALTER TABLE livefeeds ADD COLUMN status TEXT;
+            """)
+        
+        if not any(column[1] == 'instance_name' for column in columns):
+            self.connection.execute("""
+                ALTER TABLE livefeeds ADD COLUMN instance_name TEXT;
+            """)
+        
+        self.connection.execute("""
+            UPDATE livefeeds
+            SET instance_name = SUBSTR(sid, 1, INSTR(sid, '#') - 1)
+            WHERE instance_name IS NULL OR instance_name = '';
+        """)
+
+        self.connection.execute("""
+            UPDATE livefeeds
+            SET status = 'pending'
+            WHERE status IS NULL OR status = '';
+        """)
+
+        self.connection.commit()
+
+        
+    
     def close(self):
         self.connection.close()

@@ -39,13 +39,13 @@ class LivefeedsManager:
                 VALUES (?, ?, ?, ?, ?, ?)
             """, (current_time, data_name, object_name, content, response_code, error_message))
             
-    def export_livefeeds_to_json(self, output_file):
+    def export_to_json(self, output_file, table="livefeeds"):
         """
         Export all livefeeds data to a JSON file.
         """
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT * FROM livefeeds")
+            cursor.execute(f"SELECT * FROM {table}")
             rows = cursor.fetchall()
             column_names = [description[0] for description in cursor.description]
             data = [dict(zip(column_names, row)) for row in rows]
@@ -55,3 +55,14 @@ class LivefeedsManager:
             print(f"Successfully saved livefeeds to file: {output_file}")
         except Exception as e:
             print(f"Error exporting livefeeds: {e}")
+    
+    def save_reblogfavourite(self, instance, status_id, reblogs, favourites):
+        sid = f"{instance}#{status_id}"
+        try:
+            with self.connection:
+                self.connection.execute("""
+                    INSERT INTO booster_favouriter (sid, boosts, favourites)
+                    VALUES (?, ?, ?)
+                """, (sid, json.dumps(reblogs), json.dumps(favourites)))
+        except Exception as e:
+            print(f"Error saving status: {e}")    
