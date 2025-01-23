@@ -14,6 +14,9 @@ from .config import Config
 
 logger = logging.getLogger(__name__)
 
+limit_dict = {}
+limit_set = set()
+
 def get_favourite_boost(pid, instance, status_id, headers, local_collections):
     """
     Fetches reblogs and favourites for a specific status.
@@ -131,7 +134,7 @@ def fetch_status_id(local_livefeeds_collection, limit_set, local_collections, re
         if retry_time >= retry_thresh:
             return None
 
-def process_task(pid, config, local_collections, tokens, terminate_flag):
+def process_task(worker_id, config, local_collections, tokens, terminate_flag):
     """
     Worker process task for fetching reblogs and favourites.
     
@@ -146,9 +149,9 @@ def process_task(pid, config, local_collections, tokens, terminate_flag):
         try:
             info = fetch_status_id(local_collections['livefeeds'], set(), local_collections)
             if info:
-                token = tokens[pid % len(tokens)]
+                token = tokens[worker_id]
                 headers = {'Authorization': f'Bearer {token}', 'Email': config.api.get('email', '')}
-                success = get_favourite_boost(pid, info['instance_name'], info['id'], headers, local_collections)
+                success = get_favourite_boost(worker_id, info['instance_name'], info['id'], headers, local_collections)
                 if success:
                     logger.info(f"Successfully fetched reblogs and favourites for {info['instance_name']}#{info['id']}")
                 else:
@@ -169,12 +172,11 @@ def main():
     """
     parser = argparse.ArgumentParser(description='Mastodon Reblog and Favourite Worker')
     parser.add_argument('--processnum', type=int, default=1, help='Number of parallel processes')
+    parser.add_argument('--worker_id', type=int, default=1, help='Number of parallel processes')
     args = parser.parse_args()
     
     config = Config()
-    central_mongodb_uri = config.get_central_mongodb_uri()
-    client = MongoClient(central_mongodb_uri)
-    db = client['mastodon']
+
     
     local_mongodb_uri = config.get_local_mongodb_uri()
     local_client = MongoClient(local_mongodb_uri)
@@ -198,7 +200,7 @@ def main():
     
     process_list = []
     for i in range(args.processnum):
-        p = Process(target=process_task, args=(i, config, local_collections, tokens, terminate_flag))
+        p = Process(target=process_task, args=(args.worker_id, config, local_collections, tokens, terminate_flag))
         p.start()
         process_list.append(p)
     
@@ -210,8 +212,7 @@ def main():
         for p in process_list:
             p.terminate()
         logger.info("Terminated all processes.")
-    
-    client.close()
+
     local_client.close()
     logger.info("Reblog and Favourite Worker task completed.")
 

@@ -107,21 +107,3 @@ WARNING: An indication that something unexpected happened, or indicative of some
 ERROR: Due to a more serious problem, the software has not been able to perform some function.  
 CRITICAL: A very serious error, indicating that the program itself may be unable to continue running.  
 
-## Analysis Results
-Below are visual representations of the analysis conducted on the collected Mastodon tweets. These insights highlight user behavior, popular content, and engagement patterns within the Mastodon ecosystem.
-
-### 1. Interaction Between Instances
-
-![Interaction Between Instances](images/Interaction.png)
-
-### 2. Top 10 Instances by Interaction Count
-
-![Top 10 Instances by Interaction Count](images/Top_10_Instances.png)
-
-### 3. Interaction Counts Among Top 5 Instances
-
-![Interaction Counts Among Top 5 Instances](images/Interaction_Counts.png)
-
-### 4. Average Sentiment Index per Instance
-
-![Average Sentiment Index per Instance](images/Average_Sentiment.png)

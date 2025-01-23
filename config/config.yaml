@@ -1,18 +1,18 @@
 # config/config.yaml
 mongodb_central:
   username: "admin"
-  password: "CentralPassword123!"
-  host: "central.mongodb.server.com"
+  password: "admin_password"
+  host: "central.ip.name"
   port: 27018
 
 mongodb_local:
   username: "admin"
-  password: "LocalPassword456!"
+  password: "admin_password"
   host: "localhost"
   port: 27018
 
 api:
-  central_token: ""
+  central_token: "reDAMR9utc9Q9YE0RTW9FZhOhiMRrsMhE67JqE1qlOCQ5991yyKqrxQHYoNLGwlnUbVEvpuM3QtvdGshb1IaKhaaTykIFiGYLCFONlbmjOvKaeNBvTRPC35tEsk27xEB"
   email: "your_email@example.com"
 
 paths:

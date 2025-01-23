@@ -121,7 +121,7 @@ def fetch_livefeeds(instance_info, config, local_collections, tokens, worker_id,
                             item['instance_name'] = instance_name
                             item['sid'] = f"{instance_name}#{item['id']}"
                             item['loadtime'] = datetime.now()
-                            item['processable'] = True
+                            item['status'] = 'pending'
                             try:
                                 local_collections['livefeeds'].insert_one(item)
                                 logger.info(f"Saved a tweet from {instance_name}.")
@@ -144,7 +144,7 @@ def fetch_livefeeds(instance_info, config, local_collections, tokens, worker_id,
                             item['instance_name'] = instance_name
                             item['sid'] = f"{instance_name}#{item['id']}"
                             item['loadtime'] = datetime.now()
-                            item['processable'] = True
+                            item['status'] = 'pending'
                             try:
                                 local_collections['livefeeds'].insert_one(item)
                                 logger.info(f"Saved a tweet from {instance_name}.")
@@ -155,7 +155,7 @@ def fetch_livefeeds(instance_info, config, local_collections, tokens, worker_id,
                         else:
                             local_collections['instances'].update_one(
                                 {"name": instance_name},
-                                {"$set": {"round": max_round, "processable": False}}
+                                {"$set": {"round": max_round}}
                             )
                             return
                 
@@ -192,14 +192,14 @@ def fetch_livefeeds(instance_info, config, local_collections, tokens, worker_id,
                 )
                 return
         except Exception as e:
-            logger.exception(f"Exception while connecting to {instance_name}: {e}")
+            logger.exception(f"Exception while connecting to {instance_name}")
             local_collections['instances'].update_one(
                 {"name": instance_name},
                 {"$set": {"round": max_round, "processable": False}}
             )
             return
 
-def process_task(worker_id, config, local_collections, tokens, global_duration, max_round):
+def process_task(worker_id, config, collections, tokens, global_duration, max_round):
     """
     Processes tasks by fetching instances and their tweets.
     
@@ -213,10 +213,10 @@ def process_task(worker_id, config, local_collections, tokens, global_duration, 
     """
     for round_num in range(max_round + 1):
         while True:
-            instance_info = fetch_instance(round_num - 1, local_collections['instances'], max_round)
+            instance_info = fetch_instance(round_num - 1, collections['instances'], max_round)
             if instance_info:
                 logger.info(f"Found instance: {instance_info['name']}, starting processing.")
-                fetch_livefeeds(instance_info, config, local_collections, tokens, worker_id, global_duration, max_round)
+                fetch_livefeeds(instance_info, config, collections, tokens, worker_id, global_duration, max_round)
             else:
                 logger.info(f"No more instances to process for round {round_num}.")
                 break
@@ -257,7 +257,7 @@ def main():
     max_round = compute_round_time(global_duration)
     logger.info(f"Maximum rounds: {max_round}")
     
-    local_collections = {
+    collections = {
         'livefeeds': local_livefeeds_collection,
         'error_log': local_error_collection,
         'instances': instances_collection
@@ -265,7 +265,7 @@ def main():
     
     process_list = []
     for i in range(args.processnum):
-        p = Process(target=process_task, args=(args.id + i, config, local_collections, tokens, global_duration, max_round))
+        p = Process(target=process_task, args=(args.id, config, collections, tokens, global_duration, max_round))
         p.start()
         process_list.append(p)
     
