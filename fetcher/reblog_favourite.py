@@ -9,8 +9,8 @@ from pymongo.errors import DuplicateKeyError
 from multiprocessing import Process
 import logging
 import random
-from .utils import judge_sleep, save_error_log, create_unique_index
-from .config import Config
+from utils import judge_sleep_limit_table, judge_api_islimit, save_error_log, create_unique_index
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ def get_favourite_boost(pid, instance, status_id, headers, local_collections):
                 response = requests.get(url, headers=headers, params=params, timeout=5)
                 if response.status_code == 200:
                     res_headers = {k.lower(): v for k, v in response.headers.items()}
-                    judge_sleep(res_headers, instance)
+                    judge_sleep_limit_table(res_headers, instance,limit_dict,limit_set)
                     data = response.json()
                     storage.extend(data)
                     if 'link' not in res_headers or len(data) < 40:
@@ -111,6 +111,7 @@ def fetch_status_id(local_livefeeds_collection, limit_set, local_collections, re
     """
     retry_time = 0
     while True:
+        judge_api_islimit(limit_dict,limit_set)
         candidates = list(local_livefeeds_collection.find(
             {
                 "status": "pending",
@@ -139,7 +140,7 @@ def process_task(worker_id, config, local_collections, tokens, terminate_flag):
     Worker process task for fetching reblogs and favourites.
     
     Args:
-        pid (int): Process ID.
+        worker_id (int): ID of this host.
         config (Config): Configuration object.
         local_collections (dict): Local MongoDB collections.
         tokens (list): List of API tokens.
@@ -147,7 +148,7 @@ def process_task(worker_id, config, local_collections, tokens, terminate_flag):
     """
     while not terminate_flag['terminate']:
         try:
-            info = fetch_status_id(local_collections['livefeeds'], set(), local_collections)
+            info = fetch_status_id(local_collections['livefeeds'], limit_set, local_collections)
             if info:
                 token = tokens[worker_id]
                 headers = {'Authorization': f'Bearer {token}', 'Email': config.api.get('email', '')}

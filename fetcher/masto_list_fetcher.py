@@ -3,8 +3,8 @@ import requests
 from pymongo import MongoClient, errors
 from datetime import datetime
 import logging
-from .utils import create_unique_index, save_error_log
-from .config import Config
+from utils import create_unique_index, save_error_log
+from config import Config
 
 logger = logging.getLogger(__name__)
 

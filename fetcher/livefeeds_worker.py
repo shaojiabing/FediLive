@@ -9,11 +9,11 @@ from multiprocessing import Process
 import random
 import re
 import logging
-from .utils import (
+from utils import (
     create_unique_index, judge_sleep, save_error_log,
     transform_ISO2datetime, transform_str2datetime, compute_round_time
 )
-from .config import Config
+from config import Config
 
 logger = logging.getLogger(__name__)
 
