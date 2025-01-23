@@ -2,7 +2,7 @@
 import requests
 import time
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import argparse
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
@@ -62,6 +62,8 @@ def get_favourite_boost(pid, instance, status_id, headers, local_collections):
                     time.sleep(random.random())
                     logger.warning("Encountered 429 or 503 error, retrying...")
                     if retry_time > retry_thresh:
+                        limit_set.add(instance)
+                        limit_dict[instance] = datetime.now(timezone.utc) + timedelta(minutes=5)
                         save_error_log(local_collections['error_log'], "booster_favouriter", f"{instance}#{status_id}", "429or503", error_message=response.text)
                         return False
                 else:
