@@ -1,8 +1,8 @@
 # config/config.yaml
 api:
-  instance_token: "hUQjkWOKCQPLSrPhE5kurAVXJO8gauKE82jBwWdAb3HQXGTdiPRfVohvlgkjjiWGum19Hedr2Dim6SMjKV4IqVGHAv6FTqQ1AyLPPSe2jaQsrCKwySbtWweOIdFackYY"
-  livefeeds_token: "56TDjS3vpVrHpkLz76VjNGh71942TpfSG2v0T3mssoQ"
-  email: "21307140115@m.fudan.edu.cn" #"your_email@example.com"
+  instance_token: "your_instance_api_token"
+  livefeeds_token: "your_mastodon_api_token"
+  email: "your_email@example.com"
 
 paths:
   instances_list: "instances_list.txt"
