@@ -1,3 +1,4 @@
+# fetcher/database_manager.py
 import sqlite3
 import logging
 from datetime import datetime, timezone

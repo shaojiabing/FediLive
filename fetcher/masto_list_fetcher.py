@@ -1,9 +1,9 @@
 # fetcher/masto_list_fetcher.py
 import argparse
-from database_manager import DatabaseManager
-from instance_manager import InstanceManager
+from .database_manager import DatabaseManager
+from .instance_manager import InstanceManager
 import requests
-from config import Config
+from .config import Config
 import logging
 
 logger = logging.getLogger(__name__)

@@ -1,13 +1,14 @@
+# fetcher/reblog_favourite.py
 import random
 import requests
 import time
 import re
 import argparse
 from multiprocessing import Process
-from utils import judge_api_islimit, judge_sleep_limit_table
-from database_manager import DatabaseManager
-from livefeeds_manager import LivefeedsManager
-from config import Config
+from .utils import judge_api_islimit, judge_sleep_limit_table
+from .database_manager import DatabaseManager
+from .livefeeds_manager import LivefeedsManager
+from .config import Config
 import logging 
 
 logger = logging.getLogger(__name__)

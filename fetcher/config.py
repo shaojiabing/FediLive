@@ -9,7 +9,7 @@ class Config:
     Configuration loader for Mastodon Scraper.
     Loads settings from a YAML configuration file.
     """
-    def __init__(self, config_path='../config/config.yaml'):
+    def __init__(self, config_path='config/config.yaml'):
         if not os.path.exists(config_path):
             raise FileNotFoundError(f"Configuration file not found: {config_path}")
         with open(config_path, 'r', encoding='utf-8') as file:
