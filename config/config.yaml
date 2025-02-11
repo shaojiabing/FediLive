@@ -12,7 +12,7 @@ mongodb_local:
   port: 27018
 
 api:
-  central_token: "reDAMR9utc9Q9YE0RTW9FZhOhiMRrsMhE67JqE1qlOCQ5991yyKqrxQHYoNLGwlnUbVEvpuM3QtvdGshb1IaKhaaTykIFiGYLCFONlbmjOvKaeNBvTRPC35tEsk27xEB"
+  central_token: ""
   email: "your_email@example.com"
 
 paths:

@@ -1,5 +1,5 @@
 
-# FediLive is a tool designed to quickly collect toots from the entire Mastodon network during a specified time period.
+# FediLive is a tool designed to quickly collect toots from all Mastodon instances during a specified time period.
 
 ## Installation
 
