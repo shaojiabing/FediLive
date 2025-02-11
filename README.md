@@ -25,6 +25,10 @@
 
     Ensure you have MongoDB installed and running. Edit the `config/config.yaml` file with your MongoDB connection details, API tokens, and logging preferences.
 
+    Each machine must have MongoDB installed. In config.yaml, set mongodb_central to the same machine and mongodb_local to the local machine itself. For the API, apply for central_token at https://instances.social/api/token. This token will be used to collect the list of Mastodon instances. For details, please see https://instances.social/.
+
+    To allow every machine to access the MongoDB on the central node, I suggest changing the net.bindIp setting in the MongoDB configuration file (mongo.conf) to 0.0.0.0. Additionally, I recommend changing the port and adding an access username and password to prevent access by unauthorized personnel.
+
     ```yaml
     mongodb_central:
       username: "central_admin"
@@ -59,6 +63,8 @@
 
     Populate the `tokens/token_list.txt` file with your API tokens, one per line. Ensure the number of tokens exceeds the number of parallel processes you intend to run.
 
+    These tokens will be used to collect toots from various Mastodon instances. Tokens can be requested following the guidelines at https://docs.joinmastodon.org/.
+
 
 ## Usage
 
@@ -67,25 +73,26 @@
 Run this on the central node to fetch all Mastodon instances and store their information in MongoDB.
 
 ```bash
-python -m fetcher.masto_list_fetcher
+python ./fetcher/masto_list_fetcher
 ```
 
-### 2. Fetch Tweets
-You can run this on multiple machines in parallel.
+### 2. Fetch Toots
+Run this on multiple machines in parallel.
 ```bash
-python -m fetcher.livefeeds_worker --id 0 --processnum 2 --start "2024-01-01 00:00:00" --end "2024-01-02 00:00:00"
+python ./fetcher/livefeeds_worker --id 0 --processnum 2 --start "2024-01-01 00:00:00" --end "2024-01-02 00:00:00"
 ```
 Parameters:
 
 --id: Worker ID (starting from 0), used to select different API tokens.  
---processnum: Number of parallel processes.  
---start: Start time for fetching tweets (format: YYYY-MM-DD HH:MM:SS).  
---end: End time for fetching tweets (format: YYYY-MM-DD HH:MM:SS).  
+--processnum: Number of parallel processes at each host.  
+--start: Start time for fetching toots (format: YYYY-MM-DD HH:MM:SS).  
+--end: End time for fetching toots (format: YYYY-MM-DD HH:MM:SS).  
 
 ### 3. Fetch Reblogs and Favourites
+Run this on multiple machines in parallel.
 
 ```bash
-python -m fetcher.reblog_favourite --processnum 3
+python ./fetcher/reblog_favourite --processnum 3
 ```
 Parameters:
 

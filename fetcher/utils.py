@@ -116,12 +116,12 @@ def transform_str2datetime(time_str):
     Converts a formatted string to a datetime object.
     
     Args:
-        time_str (str): Time string in the format 'YYYY-MM-DD HH:MM:SS.microseconds'.
+        time_str (str): Time string in the format 'YYYY-MM-DD HH:MM:SS'.
     
     Returns:
         datetime: Corresponding datetime object.
     """
-    return datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S.%f")
+    return datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
 
 def compute_round_time(global_duration):
     """
