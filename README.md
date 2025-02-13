@@ -1,5 +1,16 @@
+FediLive
+==================
 
-# FediLive is a tool designed to quickly collect toots from all Mastodon instances during a specified time period.
+FediLive is a data collection tool designed to quickly fetch **user interactions** from all Mastodon instances during a user-defined time period for downstream analysis.
+
+
+___________________________________________________________________________
+
+[![License][license-image]][license-url]
+
+[license-image]:https://img.shields.io/github/license/FDUDataNET/FediLive
+[license-url]: https://github.com/FDUDataNET/FediLive/blob/Multi/LICENSE
+
 
 ## Installation
 
