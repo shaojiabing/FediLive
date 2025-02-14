@@ -127,3 +127,6 @@ WARNING: An indication that something unexpected happened, or indicative of some
 ERROR: Due to a more serious problem, the software has not been able to perform some function.  
 CRITICAL: A very serious error, indicating that the program itself may be unable to continue running.  
 
+
+## Datasets
+We collected approximately two weeks of data using FediLive and have published it on Zenodo. You can download the dataset here: https://zenodo.org/records/14869106
